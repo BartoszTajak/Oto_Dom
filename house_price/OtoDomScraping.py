@@ -77,10 +77,11 @@ class OtoDomWebScraping(QObject):
             for article_no, article_href in enumerate(hrefs):
 
                 self.stepIncreased.emit(numer)
-                numer +=1
+                numer += 1
 
                 try:
-                    print("Page: " + str(page) + '/' + str(pages) + ", advertisement: " + str(article_no + 1) + '/' + str( len(hrefs)))
+                    print("Page: " + str(page) + '/' + str(pages) + ", advertisement: " + str(article_no + 1) + '/' +
+                          str( len(hrefs)))
 
                     # move to next link  (article_href)
                     time.sleep(0.3)
@@ -101,14 +102,14 @@ class OtoDomWebScraping(QObject):
                     # List of parameters
                     param_list = parameters[0].find_all("div")
 
-                    contetnt_idx = list(range(0, len(param_list), 3))
+                    content_idx = list(range(0, len(param_list), 3))
 
                     # Load parameters
                     col_names = []
                     data = []
 
                     # Add names of  parameters to correct list
-                    for param_no in contetnt_idx:
+                    for param_no in content_idx:
                         col_names.append(param_list[param_no].get_text().split(":")[0])
                         data.append(param_list[param_no].get_text().split(":")[1])
 
@@ -186,7 +187,7 @@ class OtoDomWebScraping(QObject):
         geolocator = Nominatim(user_agent="usr")
         city_center_string = self.city+'  centrum'
         city_center = list(geolocator.geocode(city_center_string))[-1]
-        loc = [data for data in df['Lokalizacja']]
+        loc = [data for data in df['content_idx']]
         locations = []
 
         for i, location in enumerate(loc):
@@ -197,23 +198,23 @@ class OtoDomWebScraping(QObject):
                 locations.append("NONE")
 
         # create lists (loc.lat, loc.long) - unzipped to list
-        locations_coordinations = list(zip(*[
+        locations_coordination = list(zip(*[
             (location.latitude, location.longitude) if (location != None and location != "NONE") else ('None', 'None')
             for location in locations]))  # Jesli nie ma 'None','None'
 
-        locations_coordinations = [list(element) for element in locations_coordinations]  # Convert to mutable (list)
+        locations_coordination = [list(element) for element in locations_coordination]  # Convert to mutable (list)
 
         # removing  None
-        indices = [index for index, value in enumerate(locations_coordinations[0]) if value == 'None']
+        indices = [index for index, value in enumerate(locations_coordination[0]) if value == 'None']
         indices.sort(reverse=True)
         # removing loop
         for index_del in indices:
-            del locations_coordinations[0][index_del]
-            del locations_coordinations[1][index_del]
+            del locations_coordination[0][index_del]
+            del locations_coordination[1][index_del]
 
         # count  manhattan distance
         manhattan_distance = [(abs(location[0] - city_center[0]) + abs(location[1] - city_center[1])) for location in
-                              zip(locations_coordinations[0], locations_coordinations[1])]  # Obl. Manhattan Distance
+                              zip(locations_coordination[0], locations_coordination[1])]  # Obl. Manhattan Distance
         manhattan_distance = [element * 111 for element in manhattan_distance]  # 1 degree = 111 kilometers
 
         manhattan = pd.Series(manhattan_distance, name='manhattan[km]')  # Utworzenie serii z manhattan distance
@@ -239,26 +240,26 @@ class OtoDomWebScraping(QObject):
         df.drop(['Tytul', 'Lokalizacja', 'URL'], axis=1, inplace=True)
 
         # One hot encode and add to frame
-        Heading = pd.get_dummies(df, columns=['Rodzaj zabudowy', 'Ogrzewanie', 'Stan wykończenia','Forma własności'])
-        df = pd.concat([df, Heading], axis=1)  # wstawienie do DataFrame
+        heading = pd.get_dummies(df, columns=['Rodzaj zabudowy', 'Ogrzewanie', 'Stan wykończenia','Forma własności'])
+        df = pd.concat([df, heading], axis=1)  # wstawienie do DataFrame
 
         # counting distance and duration with google API
         gmaps = googlemaps.Client(key='xxx')
         API_LIST_distance = []
         API_LIST_duration = []
 
-        for i, y in zip(locations_coordinations[0], locations_coordinations[1]):
+        for i, y in zip(locations_coordination[0], locations_coordination[1]):
             result = gmaps.distance_matrix(city_center, (i, y), mode='driving')
             distance = (result['rows'][0]['elements'][0]['distance']['text'])
             duration = (result['rows'][0]['elements'][0]['duration']['text'])
             API_LIST_distance.append(distance)
             API_LIST_duration.append(duration)
 
-        API_Google_Distance = pd.Series(API_LIST_distance,name='API_Google_Distance')
-        API_Google_Duration = pd.Series(API_LIST_duration,name='API_Google_Duration')
+        api_Google_distance = pd.Series(API_LIST_distance,name='API_Google_Distance')
+        api_Google_duration = pd.Series(API_LIST_duration,name='API_Google_Duration')
 
-        df['API_Google_Distance'] = API_Google_Distance
-        df['API_Google_Duration'] = API_Google_Duration
+        df['API_Google_Distance'] = api_Google_distance
+        df['API_Google_Duration'] = api_Google_duration
 
 
         #  dropping duplicate columns
@@ -277,12 +278,12 @@ class OtoDomWebScraping(QObject):
         df_clear['API_Google_Distance'] = df_clear['API_Google_Distance'].apply(lambda data: float(data.split(" ")[0]))
         df_clear['API_Google_Distance'] = df_clear['API_Google_Distance'].apply(lambda data: 0 if (data == 1) else data)
 
-        def rm_sigma(dataFrame, col_name='Cena', sigma=2):
-            mean = dataFrame[col_name].mean()
-            std = dataFrame[col_name].std()
+        def rm_sigma(data_frame, col_name='Cena', sigma=2):
+            mean = data_frame[col_name].mean()
+            std = data_frame[col_name].std()
             sigma_thresh_up = sigma * std + mean
             sigma_thres_down = mean - sigma * std
-            dataFrame = dataFrame[(dataFrame[col_name] < sigma_thresh_up) & (dataFrame[col_name] > sigma_thres_down)]
+            dataFrame = data_frame[(data_frame[col_name] < sigma_thresh_up) & (data_frame[col_name] > sigma_thres_down)]
             return dataFrame
 
         # removing misfit values
@@ -292,7 +293,7 @@ class OtoDomWebScraping(QObject):
         self.df_clear = df_clear
 
    # function to save our frame to Mongo
-    def Save_to_Mongo(self,city,city_short):
+    def Save_to_Mongo(self, city, city_short):
 
         df_clear = self.df_clear
         mongo_db = pymongo.MongoClient("mongodb://localhost:27017/")
@@ -314,11 +315,3 @@ class OtoDomWebScraping(QObject):
         flats_db_y = city_short + '_' + 'flats_y'
         flats_db_date[flats_db_x].insert_many(X.to_dict('records'))
         flats_db_date[flats_db_y].insert_many(Y.to_frame().to_dict('records'))
-
-
-if __name__ == '__main__':
-    pass
-
-
-
-

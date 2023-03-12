@@ -1,11 +1,11 @@
 import sys
 from datetime import datetime
 import unicodedata
-
+#
 from PySide6.QtWidgets import *
-
-from OtoDomScraping import *
-from OtoDom_Models import *
+#
+from house_price.OtoDomScraping import *
+from house_price.OtoDom_Models import *
 
 
 # the main class
@@ -48,7 +48,7 @@ class MyTableWidget(QWidget):
         self.load_mongo()  # load from Mongodb all places scraped before
         self.layout = QGridLayout()  # create Layout
         self.path = ''
-        self.progres = 100
+        self.progress = 100
 
 
 #  -------------------- create tabs------------------------------------------------------------------
@@ -81,8 +81,8 @@ class MyTableWidget(QWidget):
         self.level.setPlaceholderText("level")
         self.level_in_block = QLineEdit(self)
         self.level_in_block.setPlaceholderText("Level in Block")
-        self.type_maret = QComboBox(self)
-        self.type_maret.addItems(['pierwotny', 'wtórny'])
+        self.type_market = QComboBox(self)
+        self.type_market.addItems(['pierwotny', 'wtórny'])
         self.heading = QComboBox(self)
         self.heading.addItems(['gazowe', 'elektryczne', 'kotłowe', 'miejskie', 'piec kaflowy', 'inne'])
         self.type_building = QComboBox(self)
@@ -191,7 +191,7 @@ class MyTableWidget(QWidget):
         self.tab3.layout.addWidget(self.level, 2, 1)
         self.tab3.layout.addWidget(self.Year_of_build, 3, 0)
         self.tab3.layout.addWidget(self.level_in_block, 3, 1)
-        self.tab3.layout.addWidget(self.type_maret, 4, 0)
+        self.tab3.layout.addWidget(self.type_market, 4, 0)
         self.tab3.layout.addWidget(self.form_of_the_property, 4, 1)
         self.tab3.layout.addWidget(self.heading, 5, 0)
         self.tab3.layout.addWidget(self.type_building, 0, 1)
@@ -241,7 +241,7 @@ class MyTableWidget(QWidget):
         clean_looks = QStyleFactory.create('cleanlooks')
         msg_box.setStyle(clean_looks)
         msg_box.setText("Found  {value} offerts \n Start Scraping ? ".format(value=self.obiekt.base_info()))
-        self.progres = int(self.obiekt.base_info())
+        self.progress = int(self.obiekt.base_info())
         msg_box.setWindowTitle("Next step?")
         msg_box.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
         msg_box.exec()
@@ -277,7 +277,8 @@ class MyTableWidget(QWidget):
 
     # load csv file (polish city)
     def load_places_from_csv(self):
-        df = pd.read_csv(r"C:\Users\barto\PycharmProjects\WebScraping\Ultimate Project\csv_files\miasta.csv", sep=';')
+        places_csv = Path(os.getcwd()).parents[0] / "csv_files/miasta.csv"
+        df = pd.read_csv(places_csv, sep=';')
         big_name = df['Nazwa miejscowości '].tolist()
         small_name = df['miasta'].tolist()
         self.lista = big_name + small_name
@@ -314,7 +315,7 @@ class MyTableWidget(QWidget):
         return self.text.setText(self.path), self.path, self.name_Mongo
 
     def progress_bar(self):
-        self.progressBar.setMaximum(self.progres)
+        self.progressBar.setMaximum(self.progress)
         try:
             self.progressBar.setValue(counter)
         except:
@@ -322,25 +323,25 @@ class MyTableWidget(QWidget):
 
     # Scraping process is done
     def messagebox_scraping_is_done(self):
-        msgBox = QMessageBox()
-        msgBox.setIcon(QMessageBox.Information)
+        msg_box = QMessageBox()
+        msg_box.setIcon(QMessageBox.Information)
         clean_looks = QStyleFactory.create('cleanlooks')
-        msgBox.setStyle(clean_looks)
-        msgBox.setText("Scraping Proces is finished")
-        msgBox.setWindowTitle("Process Done")
-        msgBox.setStandardButtons(QMessageBox.Ok)
-        msgBox.exec()
+        msg_box.setStyle(clean_looks)
+        msg_box.setText("Scraping Proces is finished")
+        msg_box.setWindowTitle("Process Done")
+        msg_box.setStandardButtons(QMessageBox.Ok)
+        msg_box.exec()
 
     # the message includes predicting price
     def messagebox_price(self):
-        msgBox = QMessageBox()
-        msgBox.setIcon(QMessageBox.Information)
+        msg_box = QMessageBox()
+        msg_box.setIcon(QMessageBox.Information)
         clean_looks = QStyleFactory.create('cleanlooks')
-        msgBox.setStyle(clean_looks)
-        msgBox.setText(f'Price according to enter data is {str(int(self.price[0]))} PLN ')
-        msgBox.setWindowTitle("Price")
-        msgBox.setStandardButtons(QMessageBox.Ok)
-        msgBox.exec()
+        msg_box.setStyle(clean_looks)
+        msg_box.setText(f'Price according to enter data is {str(int(self.price[0]))} PLN ')
+        msg_box.setWindowTitle("Price")
+        msg_box.setStandardButtons(QMessageBox.Ok)
+        msg_box.exec()
 
     # display places saved in MongoDB
     def load_mongo(self):
@@ -359,7 +360,7 @@ class MyTableWidget(QWidget):
     # create model according to chosen Checkbox
     def create_model_func(self):
         model = Models(self.DataSet_Mongo.currentText())
-        model.Load_from_Mongo()
+        model.load_from_Mongo()
         model.Split_Date_for_Test_and_Train()
         if self.LinearRegression.isChecked():
             model.LinearRegression()
@@ -390,7 +391,7 @@ class MyTableWidget(QWidget):
         distans_to_centrum_pred = self.distans_to_centrum.text()
         enter_area_pred = self.enter_area.text()
         year_of_build_pred = self.Year_of_build.text()
-        type_maret_pred = self.type_maret.currentText()
+        type_maret_pred = self.type_market.currentText()
         heading_pred = self.heading.currentText()
         type_building_pred = self.type_building.currentText()
         condition_pred = self.condition.currentText()
@@ -416,7 +417,7 @@ class MyTableWidget(QWidget):
         price_result.Split_Date_for_Test_and_Train()
         price_result.Compare_All_Results()
         self.price = price_result.Temp_LinRegres()
-        return self.MessageBox_Price()
+        return self.messagebox_price()
 
 
 # the class TableView creates a new window with compared data MSE ( comparing all models and count MSE )
@@ -456,7 +457,8 @@ class WorkerThread(QRunnable):
         self.obiekt.stepIncreased.connect(self.temp)
         self.obiekt.WebScraping(self.path)
         self.obiekt.Convert_and_Clean_Date(self.path)
-        city_name = self.city.text().replace('Ł', 'L') if 'Ł'  in self.city.text() else (self.city.text().replace('ł', 'l') if 'ł' in self.city.text() else self.city.text())
+        city_name = self.city.text().replace('Ł', 'L') if 'Ł'  in self.city.text() else (self.city.text().replace
+                    ('ł', 'l') if 'ł' in self.city.text() else self.city.text())
         city = unicodedata.normalize('NFKD', city_name).encode('ascii', 'ignore').decode("utf8")
         self.obiekt.Save_to_Mongo(self.name_Mongo, city)
 
@@ -472,3 +474,5 @@ if __name__ == '__main__':
     window = App()
     window.show()
     app.exec()
+
+

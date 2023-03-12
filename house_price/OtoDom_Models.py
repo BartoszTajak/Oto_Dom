@@ -1,5 +1,6 @@
 import pickle
 import os
+from pathlib import Path
 
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -15,15 +16,14 @@ import xgboost as xgb
 import tensorflow as tf
 
 
-
 # class count and create a visualization of models
 class Models:
-    def __init__(self ,city):
-        self.city =city
+    def __init__(self, city):
+        self.city = city
         self.short_city = city.split('_')[0]
 
     # load data from Mongo
-    def Load_from_Mongo(self):
+    def load_from_Mongo(self):
         # Connect with mongo client
         mongo_db = pymongo.MongoClient("mongodb://localhost:27017/")
         # Connect to database
@@ -35,7 +35,6 @@ class Models:
         string_y = '{city}_flats_y'.format(city=self.short_city)
         city_flats_x = flats_db[string_x]
         city_flats_y = flats_db[string_y]
-
 
         # Define X and Y variables (input and output of our ML models)
         X = []
@@ -54,19 +53,19 @@ class Models:
 
     # split data for test and train
     def Split_Date_for_Test_and_Train(self):
-
-         self.X_train, self.X_test, self.Y_train, self.Y_test = train_test_split(self.X, self.Y, test_size=0.2, random_state=10)
-         min_max_scaler = MinMaxScaler()
-         self.X_train_norm = min_max_scaler.fit_transform(self.X_train)
-         self.X_test_norm = min_max_scaler.transform(self.X_test)
+        self.X_train, self.X_test, self.Y_train, self.Y_test = train_test_split(self.X, self.Y, test_size=0.2,
+                                                                                random_state=10)
+        min_max_scaler = MinMaxScaler()
+        self.X_train_norm = min_max_scaler.fit_transform(self.X_train)
+        self.X_test_norm = min_max_scaler.transform(self.X_test)
 
 
 
     def LinearRegression(self):
-        mypath = r'C:\Users\barto\PycharmProjects\House-Price-PL\models\Saved_other_models\LinearRegression'
+        mypath = Path(os.getcwd()).parents[0] / 'models/Saved_other_models/LinearRegression'
         arr = os.listdir(mypath)
         if f'{self.city}.sav' in arr:
-            sklearn_linear = pickle.load(open(fr'C:\Users\barto\PycharmProjects\House-Price-PL\models\Saved_other_models\LinearRegression\{self.city}.sav', 'rb'))
+            sklearn_linear = pickle.load(open(Path(os.getcwd()).parents[0] / f'models/Saved_other_models/LinearRegression/{self.city}.sav', 'rb'))
             Y_predictions_train = sklearn_linear.predict(self.X_train_norm)
             Y_predictions_test = sklearn_linear.predict(self.X_test_norm)
         else:
@@ -74,7 +73,7 @@ class Models:
             sklearn_linear.fit(self.X_train_norm, self.Y_train)
             Y_predictions_train = sklearn_linear.predict(self.X_train_norm)
             Y_predictions_test = sklearn_linear.predict(self.X_test_norm)
-            pickle.dump(sklearn_linear, open(fr'C:\Users\barto\PycharmProjects\House-Price-PL\models\Saved_other_models\LinearRegression\{self.city}.sav', 'wb'))
+            pickle.dump(sklearn_linear, open(Path(os.getcwd()).parents[0] / f'models/Saved_other_models/LinearRegression/{self.city}.sav', 'wb'))
 
         MSE_train_LinearRegression = round(metrics.mean_squared_error(self.Y_train, Y_predictions_train, squared=False), 2)
         MSE_test_LinearRegression = round(metrics.mean_squared_error(self.Y_test, Y_predictions_test, squared=False), 2)
@@ -93,10 +92,10 @@ class Models:
 
     def DecisionTreeRegressor (self):
 
-        mypath = r'C:\Users\barto\PycharmProjects\House-Price-PL\models\Saved_other_models\DecisionTreeRegressor'
+        mypath = Path(os.getcwd()).parents[0] / 'models/Saved_other_models/DecisionTreeRegressor'
         arr = os.listdir(mypath)
         if f'{self.city}.sav' in arr:
-            tree_regr = pickle.load(open(fr'C:\Users\barto\PycharmProjects\House-Price-PL\models\Saved_other_models\DecisionTreeRegressor\{self.city}.sav', 'rb'))
+            tree_regr = pickle.load(open(Path(os.getcwd()).parents[0] / f'models/Saved_other_models/DecisionTreeRegressor/{self.city}.sav', 'rb'))
             Y_predictions_train = tree_regr.predict(self.X_train_norm)
             Y_predictions_test = tree_regr.predict(self.X_test_norm)
         else:
@@ -104,7 +103,7 @@ class Models:
             tree_regr.fit(self.X_train_norm, self.Y_train)
             Y_predictions_train = tree_regr.predict(self.X_train_norm)
             Y_predictions_test = tree_regr.predict(self.X_test_norm)
-            pickle.dump(tree_regr, open(rf'C:\Users\barto\PycharmProjects\House-Price-PL\models\Saved_other_models\DecisionTreeRegressor\{self.city}.sav', 'wb'))
+            pickle.dump(tree_regr, open(Path(os.getcwd()).parents[0] / f'models/Saved_other_models/DecisionTreeRegressor/{self.city}.sav', 'wb'))
 
         MSE_train_tree_regr = round(metrics.mean_squared_error(self.Y_train, Y_predictions_train, squared=False), 2)
         MSE_test_tree_regr =round(metrics.mean_squared_error(self.Y_test, Y_predictions_test, squared=False), 2)
@@ -121,10 +120,10 @@ class Models:
         plt.show()
 
     def RandomForest (self):
-        mypath = r'C:\Users\barto\PycharmProjects\House-Price-PL\models\Saved_other_models\RandomForest'
+        mypath = Path(os.getcwd()).parents[0] / 'models/Saved_other_models/RandomForest'
         arr = os.listdir(mypath)
         if  f'{self.city}.sav' in arr:
-            RandomForest = pickle.load(open(rf'C:\Users\barto\PycharmProjects\House-Price-PL\models\Saved_other_models\RandomForest\{self.city}.sav', 'rb'))
+            RandomForest = pickle.load(open(Path(os.getcwd()).parents[0] / f'models/Saved_other_models/RandomForest/{self.city}.sav', 'rb'))
             Y_predictions_train = RandomForest.predict(self.X_train_norm)
             Y_predictions_test = RandomForest.predict(self.X_test_norm)
         else:
@@ -132,7 +131,7 @@ class Models:
             RandomForest.fit(self.X_train_norm, self.Y_train.values.ravel())
             Y_predictions_train = RandomForest.predict(self.X_train_norm)
             Y_predictions_test = RandomForest.predict(self.X_test_norm)
-            pickle.dump(RandomForest, open(fr'C:\Users\barto\PycharmProjects\House-Price-PL\models\Saved_other_models\RandomForest\{self.city}.sav', 'wb'))
+            pickle.dump(RandomForest, open(Path(os.getcwd()).parents[0] / f'models/Saved_other_models/RandomForest/{self.city}.sav', 'wb'))
 
         MSE_train_RandomForest = round(metrics.mean_squared_error(self.Y_train, Y_predictions_train, squared=False), 2)
         MSE_test_RandomForest =round(metrics.mean_squared_error(self.Y_test, Y_predictions_test, squared=False), 2)
@@ -149,10 +148,10 @@ class Models:
         plt.show()
 
     def SVR (self):
-        mypath = r'C:\Users\barto\PycharmProjects\House-Price-PL\models\Saved_other_models\SVR'
+        mypath = Path(os.getcwd()).parents[0] / 'models/Saved_other_models/SVR'
         arr = os.listdir(mypath)
         if f'{self.city}.sav' in arr:
-            svr_rbf = pickle.load(open(rf'C:\Users\barto\PycharmProjects\House-Price-PL\models\Saved_other_models\SVR\{self.city}.sav', 'rb'))
+            svr_rbf = pickle.load(open(Path(os.getcwd()).parents[0] / f'models/Saved_other_models/SVR/{self.city}.sav', 'rb'))
             Y_predictions_train = svr_rbf.predict(self.X_train_norm)
             Y_predictions_test = svr_rbf.predict(self.X_test_norm)
         else:
@@ -160,7 +159,7 @@ class Models:
             svr_rbf.fit(self.X_train_norm, self.Y_train.values.ravel())
             Y_predictions_train = svr_rbf.predict(self.X_train_norm)
             Y_predictions_test = svr_rbf.predict(self.X_test_norm)
-            pickle.dump(svr_rbf, open(fr'C:\Users\barto\PycharmProjects\House-Price-PL\models\Saved_other_models\SVR\{self.city}.sav', 'wb'))
+            pickle.dump(svr_rbf, open(Path(os.getcwd()).parents[0] / f'models/Saved_other_models/SVR/{self.city}.sav', 'wb'))
 
         MSE_train_svr = round(metrics.mean_squared_error(self.Y_train, Y_predictions_train, squared=False), 2)
         MSE_test_svr =round(metrics.mean_squared_error(self.Y_test, Y_predictions_test, squared=False), 2)
@@ -181,10 +180,10 @@ class Models:
 
     def xgboost (self):
 
-        mypath = r'C:\Users\barto\PycharmProjects\House-Price-PL\models\Saved_other_models\gbxgboost_reg'
+        mypath = Path(os.getcwd()).parents[0] / 'models/Saved_other_models/gbxgboost_reg'
         arr = os.listdir(mypath)
         if f'{self.city}.sav' in arr:
-            gboost_reg = pickle.load(open(fr'C:\Users\barto\PycharmProjects\House-Price-PL\models\Saved_other_models\gbxgboost_reg\{self.city}.sav',"rb"))
+            gboost_reg = pickle.load(open(Path(os.getcwd()).parents[0] / f'models/Saved_other_models/gbxgboost_reg/{self.city}.sav',"rb"))
             Y_predictions_train = gboost_reg.predict(self.X_train_norm)
             Y_predictions_test = gboost_reg.predict(self.X_test_norm)
         else:
@@ -194,7 +193,7 @@ class Models:
             Y_predictions_test = gboost_reg.predict(self.X_test_norm)
 
 
-            pickle.dump(gboost_reg, open(fr'C:\Users\barto\PycharmProjects\House-Price-PL\models\Saved_other_models\gbxgboost_reg\{self.city}.sav', 'wb'))
+            pickle.dump(gboost_reg, open(Path(os.getcwd()).parents[0] / f'models/Saved_other_models/gbxgboost_reg/{self.city}.sav', 'wb'))
 
         MSE_train_xgboost = round(metrics.mean_squared_error(self.Y_train, Y_predictions_train, squared=False), 2)
         MSE_test_xgboost =round(metrics.mean_squared_error(self.Y_test, Y_predictions_test, squared=False), 2)
@@ -216,10 +215,10 @@ class Models:
     def Neural_Network (self):
 
 
-        mypath = r'C:\Users\barto\PycharmProjects\House-Price-PL\models\Saved_Neural_Network_models'
+        mypath = Path(os.getcwd()).parents[0] / 'models/Saved_Neural_Network_models'
         arr = os.listdir(mypath)
         if self.city in arr:
-            model = tf.keras.models.load_model(fr'C:\Users\barto\PycharmProjects\House-Price-PL\models\Saved_Neural_Network_models/{self.city}')
+            model = tf.keras.models.load_model(Path(os.getcwd()).parents[0] / f'models/Saved_Neural_Network_models/{self.city}')
             Y_predictions_train = model.predict(self.X_train_norm)
             Y_predictions_test = model.predict(self.X_test_norm)
             MSE_train = round(metrics.mean_squared_error(self.Y_train, Y_predictions_train, squared=False), 2)
@@ -236,7 +235,7 @@ class Models:
             Y_predictions_test = model.predict(self.X_test_norm)
             MSE_train = round(metrics.mean_squared_error(self.Y_train, Y_predictions_train, squared=False), 2)
             MSE_test = round(metrics.mean_squared_error(self.Y_test, Y_predictions_test, squared=False), 2)
-            model.save(fr'C:/Users\barto/PycharmProjects/House-Price-PL/Saved_Neural_Network_models/{self.city}')
+            model.save(fr'C:/Users/barto/PycharmProjects/House-Price-PL/Saved_Neural_Network_models/{self.city}')
 
 
 
@@ -259,7 +258,7 @@ class Models_Results(Models):
 
     def __init__(self ,city):
         super().__init__(city)
-        Models.Load_from_Mongo(self)
+        Models.load_from_Mongo(self)
         Models.Split_Date_for_Test_and_Train(self)
 
     def Compare_All_Results(self):
@@ -275,10 +274,10 @@ class Models_Results(Models):
         Returning value : pandas DataFrame
         '''
 
-        mypath = r'C:\Users\barto\PycharmProjects\House-Price-PL\models\Saved_other_models\LinearRegression'
+        mypath = Path(os.getcwd()).parents[0] / 'models/Saved_other_models/LinearRegression'
         arr = os.listdir(mypath)
         if f'{self.city}.sav' in arr:
-            sklearn_linear = pickle.load(open(fr'C:\Users\barto\PycharmProjects\House-Price-PL\models\Saved_other_models\LinearRegression\{self.city}.sav', 'rb'))
+            sklearn_linear = pickle.load(open(Path(os.getcwd()).parents[0] / f'models/Saved_other_models/LinearRegression/{self.city}.sav', 'rb'))
             Y_predictions_test = sklearn_linear.predict(self.X_test_norm)
             MSE_test_LinearRegression = round(metrics.mean_squared_error(self.Y_test, Y_predictions_test, squared=False), 2)
         else:
@@ -307,10 +306,10 @@ class Models_Results(Models):
         Y_predictions_test = xgb_regr.predict(self.X_test_norm)
         MSE_test_xgb_regr =round(metrics.mean_squared_error(self.Y_test, Y_predictions_test, squared=False), 2)
 
-        mypath = r'C:\Users\barto\PycharmProjects\House-Price-PL\models\Saved_Neural_Network_models'
+        mypath = Path(os.getcwd()).parents[0] / 'models/Saved_Neural_Network_models'
         arr = os.listdir(mypath)
         if self.city in arr:
-            model = tf.keras.models.load_model(fr'C:\Users\barto\PycharmProjects\House-Price-PL\models\Saved_Neural_Network_models/{self.city}')
+            model = tf.keras.models.load_model(Path(os.getcwd()).parents[0] / f'models/Saved_Neural_Network_models/{self.city}')
             Y_predictions_test = model.predict(self.X_test_norm)
             MSE_test_Neural_Network = round(metrics.mean_squared_error(self.Y_test, Y_predictions_test, squared=False), 2)
         else:
@@ -322,7 +321,7 @@ class Models_Results(Models):
             model.fit(self.X_train_norm, self.Y_train, epochs=100, verbose=1)
             Y_predictions_test = model.predict(self.X_test_norm)
             MSE_test_Neural_Network = round(metrics.mean_squared_error(self.Y_test, Y_predictions_test, squared=False),2)
-            model.save(fr'C:\Users\barto\PycharmProjects\House-Price-PL\models\Saved_Neural_Network_models/{self.city}')
+            model.save(Path(os.getcwd()).parents[0] / f'models/Saved_Neural_Network_models/{self.city}')
 
         Lista_Metods = ['LinearRegression', 'RandomForestRegressor', 'DecisionTreeRegressor','SVR', 'XGBRegressor', 'Neural_Network']
         Lista_Results = [MSE_test_LinearRegression, MSE_test_RandomForestRegressor, MSE_test_DecisionTreeRegressor, MSE_test_svr_rbf, MSE_test_xgb_regr,MSE_test_Neural_Network]
@@ -354,7 +353,7 @@ class Tool_Predict(Models):
 
 
     # load data from Mongodb
-    def Load_from_Mongo_pred(self):
+    def load_from_Mongo_pred(self):
         # Connect with mongo client
         mongo_db = pymongo.MongoClient("mongodb://localhost:27017/")
 
@@ -487,10 +486,10 @@ class Tool_Predict(Models):
         Y_predictions_test = xgb_regr.predict(self.X_test_norm)
         MSE_test_xgb_regr =round(metrics.mean_squared_error(self.Y_test, Y_predictions_test, squared=False), 2)
 
-        mypath = r'C:\Users\barto\PycharmProjects\House-Price-PL\models\Saved_Neural_Network_models'
+        mypath = Path(os.getcwd()).parents[0] / 'models/Saved_Neural_Network_models'
         arr = os.listdir(mypath)
         if self.city in arr:
-            model = tf.keras.models.load_model(fr'C:\Users\barto\PycharmProjects\House-Price-PL\models\Saved_Neural_Network_models/{self.city}')
+            model = tf.keras.models.load_model(Path(os.getcwd()).parents[0] / f'models/Saved_Neural_Network_models/{self.city}')
             Y_predictions_test = model.predict(self.X_test_norm)
             MSE_test_Neural_Network = round(metrics.mean_squared_error(self.Y_test, Y_predictions_test, squared=False), 2)
         else:
@@ -502,7 +501,7 @@ class Tool_Predict(Models):
             model.fit(self.X_train_norm, self.Y_train, epochs=100, verbose=1)
             Y_predictions_test = model.predict(self.X_test_norm)
             MSE_test_Neural_Network = round(metrics.mean_squared_error(self.Y_test, Y_predictions_test, squared=False),2)
-            model.save(fr'C:\Users\barto\PycharmProjects\House-Price-PL\models\Saved_Neural_Network_models/{self.city}')
+            model.save(Path(os.getcwd()).parents[0] / f'models/Saved_Neural_Network_models/{self.city}')
 
 
         Lista_Metods = ['LinearRegression', 'RandomForestRegressor', 'DecisionTreeRegressor','SVR', 'XGBRegressor', 'Neural_Network']
@@ -520,7 +519,6 @@ class Tool_Predict(Models):
     # function to prediction price
     def Temp_LinRegres(self):
         '''Function to predict price, according to the latest RMSE error and data entered by users
-
         parameters:
         self.X_companies_norm - numpy
 
@@ -556,12 +554,3 @@ class Tool_Predict(Models):
             xgb_regr.fit(self.X_train_norm, self.Y_train)
             Y_predictions_test = xgb_regr.predict(self.X_companies_norm)
             return Y_predictions_test
-
-if __name__ == '__main__':
-    pass
-
-
-
-
-
-
