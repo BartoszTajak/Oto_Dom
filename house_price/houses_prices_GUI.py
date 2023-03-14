@@ -4,8 +4,8 @@ import unicodedata
 #
 from PySide6.QtWidgets import *
 #
-from house_price.OtoDomScraping import *
-from house_price.OtoDom_Models import *
+from houses_prices_GUI_scraping import *
+from houses_prices_GUI_models import *
 
 
 # the main class
@@ -277,7 +277,7 @@ class MyTableWidget(QWidget):
 
     # load csv file (polish city)
     def load_places_from_csv(self):
-        places_csv = Path(os.getcwd()).parents[0] / "csv_files/miasta.csv"
+        places_csv = Path(os.getcwd()) / "csv_files/miasta.csv"
         df = pd.read_csv(places_csv, sep=';')
         big_name = df['Nazwa miejscowości '].tolist()
         small_name = df['miasta'].tolist()
@@ -468,11 +468,13 @@ class WorkerThread(QRunnable):
         counter = val
 
 
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
+
+def main_gui():
+    app = QApplication()
     app.setStyle('Fusion')
     window = App()
     window.show()
     app.exec()
 
-
+if __name__ == '__main__':
+    main_gui()

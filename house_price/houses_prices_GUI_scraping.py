@@ -38,7 +38,7 @@ class OtoDomWebScraping(QObject):
         return adds_no
 
     # main funtion to scraping
-    def WebScraping(self,filepath):
+    def WebScraping(self):
         numer = 0
         # primary link
         link_base =  r'https://www.otodom.pl/pl/oferty/sprzedaz/{rodzaj}/{city}?priceMin={min_price}&priceMax={max_price}&areaMin={min_area}&areaMax={max_area}&distanceRadius={radius}&limit=72&page='.format(

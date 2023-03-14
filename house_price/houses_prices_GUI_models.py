@@ -62,10 +62,10 @@ class Models:
 
 
     def LinearRegression(self):
-        mypath = Path(os.getcwd()).parents[0] / 'models/Saved_other_models/LinearRegression'
+        mypath = Path(os.getcwd()) / 'models/Saved_other_models/LinearRegression'
         arr = os.listdir(mypath)
         if f'{self.city}.sav' in arr:
-            sklearn_linear = pickle.load(open(Path(os.getcwd()).parents[0] / f'models/Saved_other_models/LinearRegression/{self.city}.sav', 'rb'))
+            sklearn_linear = pickle.load(open(Path(os.getcwd()) / f'models/Saved_other_models/LinearRegression/{self.city}.sav', 'rb'))
             Y_predictions_train = sklearn_linear.predict(self.X_train_norm)
             Y_predictions_test = sklearn_linear.predict(self.X_test_norm)
         else:
@@ -73,7 +73,7 @@ class Models:
             sklearn_linear.fit(self.X_train_norm, self.Y_train)
             Y_predictions_train = sklearn_linear.predict(self.X_train_norm)
             Y_predictions_test = sklearn_linear.predict(self.X_test_norm)
-            pickle.dump(sklearn_linear, open(Path(os.getcwd()).parents[0] / f'models/Saved_other_models/LinearRegression/{self.city}.sav', 'wb'))
+            pickle.dump(sklearn_linear, open(Path(os.getcwd()) / f'models/Saved_other_models/LinearRegression/{self.city}.sav', 'wb'))
 
         MSE_train_LinearRegression = round(metrics.mean_squared_error(self.Y_train, Y_predictions_train, squared=False), 2)
         MSE_test_LinearRegression = round(metrics.mean_squared_error(self.Y_test, Y_predictions_test, squared=False), 2)
@@ -92,10 +92,10 @@ class Models:
 
     def DecisionTreeRegressor (self):
 
-        mypath = Path(os.getcwd()).parents[0] / 'models/Saved_other_models/DecisionTreeRegressor'
+        mypath = Path(os.getcwd()) / 'models/Saved_other_models/DecisionTreeRegressor'
         arr = os.listdir(mypath)
         if f'{self.city}.sav' in arr:
-            tree_regr = pickle.load(open(Path(os.getcwd()).parents[0] / f'models/Saved_other_models/DecisionTreeRegressor/{self.city}.sav', 'rb'))
+            tree_regr = pickle.load(open(Path(os.getcwd()) / f'models/Saved_other_models/DecisionTreeRegressor/{self.city}.sav', 'rb'))
             Y_predictions_train = tree_regr.predict(self.X_train_norm)
             Y_predictions_test = tree_regr.predict(self.X_test_norm)
         else:
@@ -103,7 +103,7 @@ class Models:
             tree_regr.fit(self.X_train_norm, self.Y_train)
             Y_predictions_train = tree_regr.predict(self.X_train_norm)
             Y_predictions_test = tree_regr.predict(self.X_test_norm)
-            pickle.dump(tree_regr, open(Path(os.getcwd()).parents[0] / f'models/Saved_other_models/DecisionTreeRegressor/{self.city}.sav', 'wb'))
+            pickle.dump(tree_regr, open(Path(os.getcwd()) / f'models/Saved_other_models/DecisionTreeRegressor/{self.city}.sav', 'wb'))
 
         MSE_train_tree_regr = round(metrics.mean_squared_error(self.Y_train, Y_predictions_train, squared=False), 2)
         MSE_test_tree_regr =round(metrics.mean_squared_error(self.Y_test, Y_predictions_test, squared=False), 2)
@@ -120,10 +120,10 @@ class Models:
         plt.show()
 
     def RandomForest (self):
-        mypath = Path(os.getcwd()).parents[0] / 'models/Saved_other_models/RandomForest'
+        mypath = Path(os.getcwd()) / 'models/Saved_other_models/RandomForest'
         arr = os.listdir(mypath)
         if  f'{self.city}.sav' in arr:
-            RandomForest = pickle.load(open(Path(os.getcwd()).parents[0] / f'models/Saved_other_models/RandomForest/{self.city}.sav', 'rb'))
+            RandomForest = pickle.load(open(Path(os.getcwd()) / f'models/Saved_other_models/RandomForest/{self.city}.sav', 'rb'))
             Y_predictions_train = RandomForest.predict(self.X_train_norm)
             Y_predictions_test = RandomForest.predict(self.X_test_norm)
         else:
@@ -131,7 +131,7 @@ class Models:
             RandomForest.fit(self.X_train_norm, self.Y_train.values.ravel())
             Y_predictions_train = RandomForest.predict(self.X_train_norm)
             Y_predictions_test = RandomForest.predict(self.X_test_norm)
-            pickle.dump(RandomForest, open(Path(os.getcwd()).parents[0] / f'models/Saved_other_models/RandomForest/{self.city}.sav', 'wb'))
+            pickle.dump(RandomForest, open(Path(os.getcwd()) / f'models/Saved_other_models/RandomForest/{self.city}.sav', 'wb'))
 
         MSE_train_RandomForest = round(metrics.mean_squared_error(self.Y_train, Y_predictions_train, squared=False), 2)
         MSE_test_RandomForest =round(metrics.mean_squared_error(self.Y_test, Y_predictions_test, squared=False), 2)
@@ -148,10 +148,10 @@ class Models:
         plt.show()
 
     def SVR (self):
-        mypath = Path(os.getcwd()).parents[0] / 'models/Saved_other_models/SVR'
+        mypath = Path(os.getcwd()) / 'models/Saved_other_models/SVR'
         arr = os.listdir(mypath)
         if f'{self.city}.sav' in arr:
-            svr_rbf = pickle.load(open(Path(os.getcwd()).parents[0] / f'models/Saved_other_models/SVR/{self.city}.sav', 'rb'))
+            svr_rbf = pickle.load(open(Path(os.getcwd()) / f'models/Saved_other_models/SVR/{self.city}.sav', 'rb'))
             Y_predictions_train = svr_rbf.predict(self.X_train_norm)
             Y_predictions_test = svr_rbf.predict(self.X_test_norm)
         else:
@@ -159,7 +159,7 @@ class Models:
             svr_rbf.fit(self.X_train_norm, self.Y_train.values.ravel())
             Y_predictions_train = svr_rbf.predict(self.X_train_norm)
             Y_predictions_test = svr_rbf.predict(self.X_test_norm)
-            pickle.dump(svr_rbf, open(Path(os.getcwd()).parents[0] / f'models/Saved_other_models/SVR/{self.city}.sav', 'wb'))
+            pickle.dump(svr_rbf, open(Path(os.getcwd()) / f'models/Saved_other_models/SVR/{self.city}.sav', 'wb'))
 
         MSE_train_svr = round(metrics.mean_squared_error(self.Y_train, Y_predictions_train, squared=False), 2)
         MSE_test_svr =round(metrics.mean_squared_error(self.Y_test, Y_predictions_test, squared=False), 2)
@@ -180,10 +180,10 @@ class Models:
 
     def xgboost (self):
 
-        mypath = Path(os.getcwd()).parents[0] / 'models/Saved_other_models/gbxgboost_reg'
+        mypath = Path(os.getcwd()) / 'models/Saved_other_models/gbxgboost_reg'
         arr = os.listdir(mypath)
         if f'{self.city}.sav' in arr:
-            gboost_reg = pickle.load(open(Path(os.getcwd()).parents[0] / f'models/Saved_other_models/gbxgboost_reg/{self.city}.sav',"rb"))
+            gboost_reg = pickle.load(open(Path(os.getcwd()) / f'models/Saved_other_models/gbxgboost_reg/{self.city}.sav',"rb"))
             Y_predictions_train = gboost_reg.predict(self.X_train_norm)
             Y_predictions_test = gboost_reg.predict(self.X_test_norm)
         else:
@@ -193,7 +193,7 @@ class Models:
             Y_predictions_test = gboost_reg.predict(self.X_test_norm)
 
 
-            pickle.dump(gboost_reg, open(Path(os.getcwd()).parents[0] / f'models/Saved_other_models/gbxgboost_reg/{self.city}.sav', 'wb'))
+            pickle.dump(gboost_reg, open(Path(os.getcwd()) / f'models/Saved_other_models/gbxgboost_reg/{self.city}.sav', 'wb'))
 
         MSE_train_xgboost = round(metrics.mean_squared_error(self.Y_train, Y_predictions_train, squared=False), 2)
         MSE_test_xgboost =round(metrics.mean_squared_error(self.Y_test, Y_predictions_test, squared=False), 2)
@@ -215,10 +215,10 @@ class Models:
     def Neural_Network (self):
 
 
-        mypath = Path(os.getcwd()).parents[0] / 'models/Saved_Neural_Network_models'
+        mypath = Path(os.getcwd()) / 'models/Saved_Neural_Network_models'
         arr = os.listdir(mypath)
         if self.city in arr:
-            model = tf.keras.models.load_model(Path(os.getcwd()).parents[0] / f'models/Saved_Neural_Network_models/{self.city}')
+            model = tf.keras.models.load_model(Path(os.getcwd()) / f'models/Saved_Neural_Network_models/{self.city}')
             Y_predictions_train = model.predict(self.X_train_norm)
             Y_predictions_test = model.predict(self.X_test_norm)
             MSE_train = round(metrics.mean_squared_error(self.Y_train, Y_predictions_train, squared=False), 2)
@@ -269,15 +269,14 @@ class Models_Results(Models):
         self.X_train_norm -numpy
         self.Y_train -numpy
         self.Y_test -numpy
-
         return:
         Returning value : pandas DataFrame
         '''
 
-        mypath = Path(os.getcwd()).parents[0] / 'models/Saved_other_models/LinearRegression'
+        mypath = Path(os.getcwd()) / 'models/Saved_other_models/LinearRegression'
         arr = os.listdir(mypath)
         if f'{self.city}.sav' in arr:
-            sklearn_linear = pickle.load(open(Path(os.getcwd()).parents[0] / f'models/Saved_other_models/LinearRegression/{self.city}.sav', 'rb'))
+            sklearn_linear = pickle.load(open(Path(os.getcwd()) / f'models/Saved_other_models/LinearRegression/{self.city}.sav', 'rb'))
             Y_predictions_test = sklearn_linear.predict(self.X_test_norm)
             MSE_test_LinearRegression = round(metrics.mean_squared_error(self.Y_test, Y_predictions_test, squared=False), 2)
         else:
@@ -306,10 +305,10 @@ class Models_Results(Models):
         Y_predictions_test = xgb_regr.predict(self.X_test_norm)
         MSE_test_xgb_regr =round(metrics.mean_squared_error(self.Y_test, Y_predictions_test, squared=False), 2)
 
-        mypath = Path(os.getcwd()).parents[0] / 'models/Saved_Neural_Network_models'
+        mypath = Path(os.getcwd()) / 'models/Saved_Neural_Network_models'
         arr = os.listdir(mypath)
         if self.city in arr:
-            model = tf.keras.models.load_model(Path(os.getcwd()).parents[0] / f'models/Saved_Neural_Network_models/{self.city}')
+            model = tf.keras.models.load_model(Path(os.getcwd()) / f'models/Saved_Neural_Network_models/{self.city}')
             Y_predictions_test = model.predict(self.X_test_norm)
             MSE_test_Neural_Network = round(metrics.mean_squared_error(self.Y_test, Y_predictions_test, squared=False), 2)
         else:
@@ -321,7 +320,7 @@ class Models_Results(Models):
             model.fit(self.X_train_norm, self.Y_train, epochs=100, verbose=1)
             Y_predictions_test = model.predict(self.X_test_norm)
             MSE_test_Neural_Network = round(metrics.mean_squared_error(self.Y_test, Y_predictions_test, squared=False),2)
-            model.save(Path(os.getcwd()).parents[0] / f'models/Saved_Neural_Network_models/{self.city}')
+            model.save(Path(os.getcwd()) / f'models/Saved_Neural_Network_models/{self.city}')
 
         Lista_Metods = ['LinearRegression', 'RandomForestRegressor', 'DecisionTreeRegressor','SVR', 'XGBRegressor', 'Neural_Network']
         Lista_Results = [MSE_test_LinearRegression, MSE_test_RandomForestRegressor, MSE_test_DecisionTreeRegressor, MSE_test_svr_rbf, MSE_test_xgb_regr,MSE_test_Neural_Network]
@@ -486,10 +485,10 @@ class Tool_Predict(Models):
         Y_predictions_test = xgb_regr.predict(self.X_test_norm)
         MSE_test_xgb_regr =round(metrics.mean_squared_error(self.Y_test, Y_predictions_test, squared=False), 2)
 
-        mypath = Path(os.getcwd()).parents[0] / 'models/Saved_Neural_Network_models'
+        mypath = Path(os.getcwd()) / 'models/Saved_Neural_Network_models'
         arr = os.listdir(mypath)
         if self.city in arr:
-            model = tf.keras.models.load_model(Path(os.getcwd()).parents[0] / f'models/Saved_Neural_Network_models/{self.city}')
+            model = tf.keras.models.load_model(Path(os.getcwd()) / f'models/Saved_Neural_Network_models/{self.city}')
             Y_predictions_test = model.predict(self.X_test_norm)
             MSE_test_Neural_Network = round(metrics.mean_squared_error(self.Y_test, Y_predictions_test, squared=False), 2)
         else:
@@ -501,7 +500,7 @@ class Tool_Predict(Models):
             model.fit(self.X_train_norm, self.Y_train, epochs=100, verbose=1)
             Y_predictions_test = model.predict(self.X_test_norm)
             MSE_test_Neural_Network = round(metrics.mean_squared_error(self.Y_test, Y_predictions_test, squared=False),2)
-            model.save(Path(os.getcwd()).parents[0] / f'models/Saved_Neural_Network_models/{self.city}')
+            model.save(Path(os.getcwd()) / f'models/Saved_Neural_Network_models/{self.city}')
 
 
         Lista_Metods = ['LinearRegression', 'RandomForestRegressor', 'DecisionTreeRegressor','SVR', 'XGBRegressor', 'Neural_Network']
