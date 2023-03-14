@@ -19,8 +19,8 @@ pip install -e .
 ```
 
 ## Usage
-```python 
->>> house_price/__main__.py
+```bash 
+python house_price/__main__.py
 ```
 
 
