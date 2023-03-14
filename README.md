@@ -19,25 +19,10 @@ pip install -e .
 ```
 
 ## Usage
-```python
->>> import gallery_generator
->>> gallery_generator.run(target="LONDON", number=16, gallery_catalog="LONDON", grey_scale=True,  gaussian=1, padding=10)
+```python 
+>>> house_price/__main__.py
 ```
 
-## Command-line usage
-```bash
-usage: Script to searching , downloading and creating collage [-h] -t  [-n] -gc  [-gs] [-g] [-p]
-
-options:
-  -h, --help            show this help message and exit
-  -t , -target          the topic to query--> string
-  -n , -number          how many images to download--> int
-  -gc , -gallery_catalog 
-                        name of a directory--> string
-  -gs , -grey_scale     True or False --> bool
-  -g , -gaussian        blur par. Value in range 0-100--> int
-  -p , -padding         gap between img.--> int
-```
 
 ## Tabs in GUI:
 
@@ -67,16 +52,6 @@ For example, data don't include the price of parking place which raise the total
  
 ##
 
-
-
-
-##  libraries used in program :
-
-1. PySide6 - GUI
-2. BeautifulSoup , requests – scraping 
-3. numpy, pandas – convert data
-4.  pymongo - SQL
-5.  sklearn , tensorflow – machining learning 
 
 
 ## Note!
