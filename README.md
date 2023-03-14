@@ -12,11 +12,32 @@ In order to get the best results program creates a 6 regression model which comp
 5. XGBoost
 6. Neural network
 
+## Setup
+* Install all packages
+```bash
+pip install -e .
+```
 
-## Sections of program : 
-1. Regression_OtoDom_GUI - the main GUI 
-2. Regression_OtoDom_Scraping - module for scraping and converting data to panda's format
-3. Regression_OtoDom_Models - section included all regression models with compare and cout the best of them.
+## Usage
+```python
+>>> import gallery_generator
+>>> gallery_generator.run(target="LONDON", number=16, gallery_catalog="LONDON", grey_scale=True,  gaussian=1, padding=10)
+```
+
+## Command-line usage
+```bash
+usage: Script to searching , downloading and creating collage [-h] -t  [-n] -gc  [-gs] [-g] [-p]
+
+options:
+  -h, --help            show this help message and exit
+  -t , -target          the topic to query--> string
+  -n , -number          how many images to download--> int
+  -gc , -gallery_catalog 
+                        name of a directory--> string
+  -gs , -grey_scale     True or False --> bool
+  -g , -gaussian        blur par. Value in range 0-100--> int
+  -p , -padding         gap between img.--> int
+```
 
 ## Tabs in GUI:
 
