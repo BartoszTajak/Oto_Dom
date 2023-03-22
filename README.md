@@ -12,15 +12,44 @@ In order to get the best results program creates a 6 regression model which comp
 5. XGBoost
 6. Neural network
 
+## MongoDB
+* To run the application, MongoDB is required
+
+1. Download and install from: 
+<https://www.mongodb.com/products/compass>
+
+2. Use Docker to use a container
+<https://hub.docker.com/_/mongo>
+
 ## Setup
 * Install all packages
 ```bash
 pip install -e .
 ```
 
+## Before the first usage
+* Module to load all .csv files from the folder to Mongodb. Required only once before the first usage
+```bash 
+python house_price/houses_prices_before_the_first_useage.py
+```
 ## Usage
-```python 
->>> python house_price/__main__.py
+```bash 
+python house_price/__main__.py
+```
+
+* Run the main GUI
+```bash 
+python house_price/__main__.py  gui
+```
+
+* Print all recordes in MongoDB
+```bash 
+python house_price/__main__.py  models -db mongo
+```
+
+* Scraping data from <https://www.otodom.pl/>
+```bash 
+python house_price/__main__.py oto_webscraping -w1 mieszkanie -w2 szczecin
 ```
 
 
@@ -59,8 +88,4 @@ For example, data don't include the price of parking place which raise the total
 In connection with a website otodom.pl is still changing ( name of class , span etc).Program requires updating all time.
 
 • The last update , January 2022
-
-
-
-
 

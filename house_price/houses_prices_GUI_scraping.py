@@ -33,7 +33,7 @@ class OtoDomWebScraping(QObject):
         r = requests.get(link)
         soup = bs(r.content, "html.parser")
         # count amount of offerts
-        adds_no = soup.find_all('span', {'class': 'css-19fwpg e1av28t50'})[0].get_text()
+        adds_no = soup.find_all('span', {'class': 'css-19fwpg e17mqyjp2'})[0].get_text()
 
         return adds_no
 
@@ -50,7 +50,7 @@ class OtoDomWebScraping(QObject):
         soup = bs(r.content, "html.parser")
 
         # count amount of offerts
-        adds_no = soup.find_all('span', {'class': 'css-19fwpg e1av28t50'})[0].get_text()
+        adds_no = soup.find_all('span', {'class': 'css-19fwpg e17mqyjp2'})[0].get_text()
 
         # count amount pages with offerts
         pages = int(np.ceil(int(adds_no) / 72))
