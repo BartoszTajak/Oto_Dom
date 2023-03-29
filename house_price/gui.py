@@ -5,7 +5,6 @@ from datetime import datetime
 from PySide6.QtWidgets import *
 
 from house_price.houses_prices_GUI_models import *
-
 from house_price.houses_prices_GUI_scraping import *
 
 
