@@ -13,7 +13,7 @@ To achieve optimal accuracy, the program generates six regression models and sel
 
 ## Prerequisites
 1. Start a MongoDB database instance
-2. Retrieve and store the training data in `csv_files`. Contact the author for further details.
+2. Retrieve and store the training data in the directory called `csv_files`. Contact the project's author for further details.
 3. Migrate training data to the database:
 ```bash
 python db_utils/csv_to_db.py
