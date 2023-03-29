@@ -24,6 +24,11 @@ python db_utils/csv_to_db.py
 pip install -e .
 ```
 
+For development:
+```bash
+pre-commit install
+```
+
 ## Usage
 Start application
 ```bash
@@ -33,15 +38,15 @@ python3 -m house_price gui
 ### Scraping tab
 Choose search parameters in order to parse, download and store the data in the database and csv files.
 
-![window3](https://user-images.githubusercontent.com/67312266/152689372-e6620ec0-0353-42c8-87f4-3171d3255ff5.PNG)
+![window3](https://user-images.githubusercontent.com/67312266/152689372-e6620ec0-0353-42c8-87f4-3171d3255ff5.PNG) \
 Sections "domy" and "działki" are unavailable yet.
 
 ### Model tab
-Use your fetched data to train and compare your chosen ML models.
+Use your fetched data to train and compare your chosen ML models.\
 ![window5](https://user-images.githubusercontent.com/67312266/152689376-28c8af35-d456-4027-aa0b-3ef89f70ae02.PNG)
 
 ![window7](https://user-images.githubusercontent.com/67312266/152689379-67f45555-e320-40d2-b5ea-d98c6392e392.PNG)
 
 ### Inference tab
-Estimate the cost of a flat for the chosen place.
+Estimate the cost of a flat for the chosen place.\
 ![3](https://user-images.githubusercontent.com/67312266/152689385-61fd1da6-735c-46f8-bcdd-7c6f703709d3.PNG)
