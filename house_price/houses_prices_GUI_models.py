@@ -235,7 +235,7 @@ class Models:
             Y_predictions_test = model.predict(self.X_test_norm)
             MSE_train = round(metrics.mean_squared_error(self.Y_train, Y_predictions_train, squared=False), 2)
             MSE_test = round(metrics.mean_squared_error(self.Y_test, Y_predictions_test, squared=False), 2)
-            model.save(fr'C:/Users/barto/PycharmProjects/House-Price-PL/Saved_Neural_Network_models/{self.city}')
+            model.save(fr'models/{self.city}')
 
 
 

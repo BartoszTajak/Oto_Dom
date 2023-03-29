@@ -2,50 +2,49 @@ import argparse
 # from pathlib import Path
 import sys
 import pymongo
-from houses_prices_GUI import main_gui
-from houses_prices_GUI_models import Models
-from houses_prices_GUI_scraping import OtoDomWebScraping
+from house_price.gui import run as run_gui
+from house_price.houses_prices_GUI_models import Models
+from house_price.houses_prices_GUI_scraping import OtoDomWebScraping
 
+
+def oto_webscraping(args):
+    p = OtoDomWebScraping(args.rodzaj, args.city, args.radius, args.min_price, args.max_price, args.min_area, args.max_area)
+    p.WebScraping()
+    p.Convert_and_Clean_Date()
+    p.Save_to_Mongo()
+
+
+def models(args):
+    if args.db == 'mongo':
+        mongo_db = pymongo.MongoClient("mongodb://localhost:27017/")
+        list_of_db = mongo_db.list_database_names()
+        list_of_db.remove('admin')
+        list_of_db.remove('config')
+        list_of_db.remove('local')
+        for db_name in list_of_db:
+            print(db_name)
+    else:
+        p = Models(args.db)
+        p.load_from_Mongo()
+        p.Split_Date_for_Test_and_Train()
+        if args.model == 1:
+            p.LinearRegression()
+        elif  args.model == 2:
+            p.RandomForest()
+        elif  args.model == 3:
+            p.xgboost()
+        elif  args.model == 4:
+            p.DecisionTreeRegressor()
+        elif  args.model == 55:
+            p.SVR()
+        elif  args.model == 6:
+            p.Neural_Network()
+
+
+def gui(args):
+    run_gui()
 
 if __name__ == "__main__":
-
-    def oto_webscraping(args):
-        p = OtoDomWebScraping(args.rodzaj, args.city, args.radius, args.min_price, args.max_price, args.min_area, args.max_area)
-        p.WebScraping()
-        p.Convert_and_Clean_Date()
-        p.Save_to_Mongo()
-
-
-    def models(args):
-        if args.db == 'mongo':
-            mongo_db = pymongo.MongoClient("mongodb://localhost:27017/")
-            list_of_db = mongo_db.list_database_names()
-            list_of_db.remove('admin')
-            list_of_db.remove('config')
-            list_of_db.remove('local')
-            for db_name in list_of_db:
-                print(db_name)
-        else:
-            p = Models(args.db)
-            p.load_from_Mongo()
-            p.Split_Date_for_Test_and_Train()
-            if args.model == 1:
-                p.LinearRegression()
-            elif  args.model == 2:
-                p.RandomForest()
-            elif  args.model == 3:
-                p.xgboost()
-            elif  args.model == 4:
-                p.DecisionTreeRegressor()
-            elif  args.model == 55:
-                p.SVR()
-            elif  args.model == 6:
-                p.Neural_Network()
-
-
-    def gui(args):
-        main_gui()
-
     argparse = argparse.ArgumentParser(description='Process some integers.')
     subparsers = argparse.add_subparsers()
 

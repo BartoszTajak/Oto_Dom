@@ -4,8 +4,8 @@ import unicodedata
 #
 from PySide6.QtWidgets import *
 #
-from houses_prices_GUI_scraping import *
-from houses_prices_GUI_models import *
+from house_price.houses_prices_GUI_scraping import *
+from house_price.houses_prices_GUI_models import *
 
 
 # the main class
@@ -468,8 +468,7 @@ class WorkerThread(QRunnable):
         counter = val
 
 
-
-def main_gui():
+def run():
     app = QApplication()
     app.setStyle('Fusion')
     window = App()
@@ -477,4 +476,4 @@ def main_gui():
     app.exec()
 
 if __name__ == '__main__':
-    main_gui()
+    run()
