@@ -1,8 +1,7 @@
 
 ## House Price Prediction
-
-The main goal of the application is to predict the cost of flats according to entered data by users and data scraped from the website www.OtoDom.pl.
-In order to get the best results program creates a 6 regression model which compares and extracts the model with the smallest error.
+The primary objective of the application is to estimate the prices of apartments based on user input and data obtained through web scraping. \
+To achieve optimal accuracy, the program generates six regression models and selects the one with the smallest error.
 
 ## Models used in the program:
 1. Linear Regression
@@ -12,26 +11,19 @@ In order to get the best results program creates a 6 regression model which comp
 5. XGBoost
 6. Neural network
 
-## MongoDB
-* To run the application, MongoDB is required
-
-1. Download and install from: 
-<https://www.mongodb.com/products/compass>
-
-2. Use Docker to use a container
-<https://hub.docker.com/_/mongo>
+## Prerequisites
+1. Start a MongoDB database instance
+2. Retrieve and store the training data in `csv_files`. Contact the author for further details.
+3. Migrate training data to the database:
+```bash
+python db_utils/csv_to_db.py
+```
 
 ## Setup
-* Install all packages
 ```bash
 pip install -e .
 ```
 
-## Before the first usage
-* Module to load all .csv files from the folder to Mongodb. Required only once before the first usage
-```bash 
-python house_price/houses_prices_before_the_first_useage.py
-```
 ## Usage
 ```bash 
 python house_price/__main__.py
