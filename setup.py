@@ -1,13 +1,14 @@
 from distutils.core import setup
 
-setup(name='house_price',
-      version='1.0',
-      packages=['house_price'],
-      install_requires=[
+setup(
+    name="house_price",
+    version="1.0",
+    packages=["house_price"],
+    install_requires=[
         "bs4",
         "geopy",
         "googlemaps",
-        "matplotlib",     
+        "matplotlib",
         "pandas",
         "Pillow",
         "pymongo",
@@ -16,12 +17,7 @@ setup(name='house_price',
         "scikit-learn",
         "tensorflow",
         "xgboost",
-        "numpy"
-      ]
-      )
-
-
-
-
-
-
+        "numpy",
+        "pre-commit",
+    ],
+)
